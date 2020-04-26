@@ -14,14 +14,14 @@ func main() {
 			syscall.CLONE_NEWUTS | syscall.CLONE_NEWNET | syscall.CLONE_NEWUSER,
 		UidMappings: []syscall.SysProcIDMap{
 			{
-				ContainerID: 0,
+				ContainerID: 0, // 0表示root
 				HostID:      0,
 				Size:        1,
 			},
 		},
 		GidMappings: []syscall.SysProcIDMap{
 			{
-				ContainerID: 0,
+				ContainerID: 0, // 0 表示root
 				HostID:      0,
 				Size:        1,
 			},
@@ -34,5 +34,5 @@ func main() {
 	if err := cmd.Run(); err != nil {
 		log.Fatal(err)
 	}
-	os.Exit(-1)
+	os.Exit(0)
 }
