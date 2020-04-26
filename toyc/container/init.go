@@ -9,7 +9,7 @@ import (
 
 func RunContainerInitProcess(command string, args []string) error {
 	log.Infof("command %s", command)
-	// equal to "sudo mount --make-private /"
+	// equal to `sudo mount --make-private /`
 	if err := syscall.Mount("", "/", "", syscall.MS_PRIVATE|syscall.MS_REC, ""); err != nil {
 		return err
 	}
