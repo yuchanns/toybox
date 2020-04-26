@@ -8,11 +8,24 @@ import (
 )
 
 func main() {
-	cmd := exec.Command("bash")
+	cmd := exec.Command("sh")
 	cmd.SysProcAttr = &syscall.SysProcAttr{
 		Cloneflags: syscall.CLONE_NEWPID | syscall.CLONE_NEWNS | syscall.CLONE_NEWIPC |
-			syscall.CLONE_NEWUTS | syscall.CLONE_NEWNET,
-		Credential: &syscall.Credential{Uid: uint32(1), Gid: uint32(1)},
+			syscall.CLONE_NEWUTS | syscall.CLONE_NEWNET | syscall.CLONE_NEWUSER,
+		UidMappings: []syscall.SysProcIDMap{
+			{
+				ContainerID: 0,
+				HostID:      0,
+				Size:        1,
+			},
+		},
+		GidMappings: []syscall.SysProcIDMap{
+			{
+				ContainerID: 0,
+				HostID:      0,
+				Size:        1,
+			},
+		},
 	}
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
@@ -21,4 +34,5 @@ func main() {
 	if err := cmd.Run(); err != nil {
 		log.Fatal(err)
 	}
+	os.Exit(-1)
 }
