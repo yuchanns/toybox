@@ -3,6 +3,8 @@ package main
 import (
 	"errors"
 
+	"github.com/yuchanns/toybox/cgroup/subsystems"
+
 	"github.com/yuchanns/toybox/container"
 
 	log "github.com/sirupsen/logrus"
@@ -18,6 +20,10 @@ var runCommand = cli.Command{
 			Name:  "it",
 			Usage: "enable tty",
 		},
+		cli.StringFlag{
+			Name:  "m",
+			Usage: "memory limit",
+		},
 	},
 
 	Action: func(ctx *cli.Context) error {
@@ -26,7 +32,10 @@ var runCommand = cli.Command{
 		}
 		cmd := ctx.Args().Get(0)
 		tty := ctx.Bool("it")
-		Run(tty, cmd)
+		resCfg := &subsystems.ResourceCfg{
+			MemoryLimit: ctx.String("m"),
+		}
+		Run(tty, cmd, resCfg)
 		return nil
 	},
 }
